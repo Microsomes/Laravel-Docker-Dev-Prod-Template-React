@@ -1,0 +1,29 @@
+
+
+services:
+  backend:
+    image: registry.digitalocean.com/myregistrytayyab/mldabackend:latest
+    build:
+      context: ../../
+      dockerfile: .docker/prod/backend/Dockerfile
+    restart:        unless-stopped
+    tty:            true
+    networks:
+      - tayyab
+  
+  frontend:
+    image: registry.digitalocean.com/myregistrytayyab/mldafrontend:latest
+    build:
+      context: ../../
+      dockerfile: .docker/prod/frontend/Dockerfile
+    restart:        unless-stopped
+    tty:            true
+    networks:
+      - tayyab
+    ports:
+        - "7088:80"
+    depends_on:
+      - backend
+
+networks:
+  tayyab:
