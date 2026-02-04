@@ -15,6 +15,8 @@ RUN apt-get update \
 
 COPY . /var/www
 
+# Set correct permissions for Laravel writable directories
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 USER    33
 EXPOSE  9000

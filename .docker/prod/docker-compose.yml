@@ -2,6 +2,7 @@
 
 services:
   backend:
+    platform: linux/amd64
     image: registry.digitalocean.com/myregistrytayyab/mldabackend:latest
     build:
       context: ../../
@@ -12,6 +13,7 @@ services:
       - tayyab
   
   frontend:
+    platform: linux/amd64
     image: registry.digitalocean.com/myregistrytayyab/mldafrontend:latest
     build:
       context: ../../
