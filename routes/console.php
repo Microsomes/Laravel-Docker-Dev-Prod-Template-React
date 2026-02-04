@@ -11,5 +11,5 @@ Artisan::command('inspire', function () {
 
 
 
-Schedule::job(new HeartBeat)->everySecond();
+Schedule::job(new HeartBeat)->everyMinute();
 

@@ -5,13 +5,7 @@ import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-    server: {
-        host: '0.0.0.0',
-        port: 5173,
-        hmr: {
-            host: 'localhost',
-        },
-    },
+  
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.tsx'],
@@ -24,10 +18,7 @@ export default defineConfig({
             },
         }),
         tailwindcss(),
-        !process.env.SKIP_WAYFINDER &&
-            wayfinder({
-                formVariants: true,
-            }),
+
     ].filter(Boolean),
     esbuild: {
         jsx: 'automatic',
