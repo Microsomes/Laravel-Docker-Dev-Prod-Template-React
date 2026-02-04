@@ -2,30 +2,53 @@
 
 services:
   backend:
-    platform: linux/amd64
+    # platform: linux/amd64
     image: registry.digitalocean.com/myregistrytayyab/mldabackend:latest
-    build:
-      context: ../../
-      dockerfile: .docker/prod/backend/Dockerfile
+    # build:
+    #   context: ../../
+      # dockerfile: .docker/prod/backend/Dockerfile
     restart:        unless-stopped
     tty:            true
     networks:
       - tayyab
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    
+
   
   frontend:
-    platform: linux/amd64
+    # platform: linux/amd64
     image: registry.digitalocean.com/myregistrytayyab/mldafrontend:latest
-    build:
-      context: ../../
-      dockerfile: .docker/prod/frontend/Dockerfile
+    # build:
+    #   context: ../../
+    #   dockerfile: .docker/prod/frontend/Dockerfile
     restart:        unless-stopped
     tty:            true
     networks:
       - tayyab
+      - traefik-public
     ports:
         - "7088:80"
     depends_on:
       - backend
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.mlda.rule=Host(`testdocker123.duckdns.org`)"
+        - "traefik.http.routers.mlda.entrypoints=websecure"
+        - "traefik.http.routers.mlda.tls=true"
+        - "traefik.http.routers.mlda.tls.certresolver=letsencrypt"
+        - "traefik.http.services.mlda.loadbalancer.server.port=80"
+        - "traefik.docker.network=traefik-public"
   
   redis:
     image: redis:alpine
@@ -35,15 +58,13 @@ services:
   
   database:
     image: mariadb
-    container_name: devdb
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: devdb
       MYSQL_USER: root
       MYSQL_PASSWORD: password
     volumes:
-      - ./.dbdata:/var/lib/mysql
-    restart: unless-stopped
+      - mariadb_data:/var/lib/mysql
     ports:
       - "33066:3306"
     networks:
@@ -51,3 +72,8 @@ services:
 
 networks:
   tayyab:
+  traefik-public:
+    external: true
+
+volumes:
+  mariadb_data:
