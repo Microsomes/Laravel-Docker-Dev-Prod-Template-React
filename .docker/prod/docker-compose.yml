@@ -26,6 +26,42 @@ services:
         - "7088:80"
     depends_on:
       - backend
+  
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    networks:
+      - tayyab
+  
+  database:
+    image: mariadb
+    container_name: devdb
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: devdb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./.dbdata:/var/lib/mysql
+    restart: unless-stopped
+    ports:
+      - "33066:3306"
+    networks:
+      - tayyab
+  
+  node:
+    image: node:22-alpine
+    working_dir: /var/www
+    tty: true
+    volumes:
+      - ./:/var/www
+    environment:
+      - SKIP_WAYFINDER=1
+    networks:
+      - tayyab
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run build"
 
 networks:
   tayyab:
