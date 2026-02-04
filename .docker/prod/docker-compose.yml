@@ -48,20 +48,6 @@ services:
       - "33066:3306"
     networks:
       - tayyab
-  
-  node:
-    image: node:22-alpine
-    working_dir: /var/www
-    tty: true
-    volumes:
-      - ./:/var/www
-    environment:
-      - SKIP_WAYFINDER=1
-    networks:
-      - tayyab
-    ports:
-      - "5173:5173"
-    command: sh -c "npm install && npm run build"
 
 networks:
   tayyab:

@@ -1,4 +1,16 @@
+
+FROM node:22-alpine AS node-builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . ./
+RUN npm run build
+
+
+
 FROM    nginx:alpine
 COPY    .docker/prod/frontend/conf.d/app.conf                  /etc/nginx/conf.d/default.conf
 
 COPY . /var/www
+
+COPY --from=node-builder /app/public/build /var/www/public/build

@@ -8,7 +8,7 @@ export default function Welcome() {
                 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
             </Head>
             <div className="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-white text-5xl lg:justify-center lg:p-8 dark:bg-[#0a0a0a]">
-               HELLO WORLD 10010
+               HELLO WORLD 1001022
             </div>
         </>
     );

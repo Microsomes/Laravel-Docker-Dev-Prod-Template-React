@@ -1,5 +1,16 @@
+
+FROM node:22-alpine AS node-builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . ./
+RUN npm run build
+
 FROM php:8.2-fpm
 WORKDIR /var/www
+
+
+COPY --from=node-builder /app/public/build /var/www/public/build
 
 
 ################################################################################
@@ -17,6 +28,10 @@ COPY . /var/www
 
 # Set correct permissions for Laravel writable directories
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+RUN composer install --no-dev --optimize-autoloader --working-dir=/var/www
 
 USER    33
 EXPOSE  9000
