@@ -1,25 +1,41 @@
 
 
 services:
+  migrate:
+    # platform: linux/amd64
+    image: registry.digitalocean.com/myregistrytayyab/mldabackend:latest
+    command: php artisan migrate --force
+    networks:
+      - tayyab
+    depends_on:
+      - database
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+
   backend:
     # platform: linux/amd64
     image: registry.digitalocean.com/myregistrytayyab/mldabackend:latest
     # build:
     #   context: ../../
-      # dockerfile: .docker/prod/backend/Dockerfile
+    #   dockerfile: .docker/prod/backend/Dockerfile
     restart:        unless-stopped
     tty:            true
     networks:
       - tayyab
+    environment:
+      - ASSET_URL="https://testdocker123.duckdns.org"
+    depends_on:
+      - migrate
     deploy:
       replicas: 1
       restart_policy:
         condition: on-failure
         delay: 5s
         max_attempts: 3
-    
 
-  
   frontend:
     # platform: linux/amd64
     image: registry.digitalocean.com/myregistrytayyab/mldafrontend:latest
