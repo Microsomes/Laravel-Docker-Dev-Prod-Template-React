@@ -1,0 +1,5 @@
+.dbdata
+.git
+node_modules
+vendor
+.env

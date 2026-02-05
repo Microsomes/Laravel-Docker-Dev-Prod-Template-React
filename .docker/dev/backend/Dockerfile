@@ -15,6 +15,5 @@ RUN apt-get update \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-USER    33
 EXPOSE  9000
 CMD     ["php-fpm"]

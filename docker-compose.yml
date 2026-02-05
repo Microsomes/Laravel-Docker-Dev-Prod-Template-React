@@ -7,6 +7,7 @@ services:
       dockerfile: .docker/dev/backend/Dockerfile
     restart:        unless-stopped
     tty:            true
+    user:           root
     volumes:
       - ./:/var/www
     networks:
@@ -68,6 +69,7 @@ services:
       context: .
       dockerfile: .docker/dev/backend/Dockerfile
     restart: unless-stopped
+    user:     root
     volumes:
       - ./:/var/www
     networks:
@@ -82,6 +84,7 @@ services:
       context: .
       dockerfile: .docker/dev/backend/Dockerfile
     restart: unless-stopped
+    user:     root
     volumes:
       - ./:/var/www
     networks:
